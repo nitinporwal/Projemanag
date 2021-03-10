@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
 import com.example.projemanage.R
+import com.example.projemanage.firebase.FirestoreClass
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
 class SplashScreen : BaseActivity() {
@@ -21,7 +22,13 @@ class SplashScreen : BaseActivity() {
         tv_app_name.typeface = typeFace
 
         Handler().postDelayed({
-            startActivity(Intent(this, IntroActivity::class.java))
+            var currentUserID = FirestoreClass().getCurrentUserId()
+
+            if (currentUserID.isNotEmpty()) {
+                startActivity(Intent(this, MainActivity::class.java))
+            } else {
+                startActivity(Intent(this, IntroActivity::class.java))
+            }
             finish()
         }, 2500)
     }
