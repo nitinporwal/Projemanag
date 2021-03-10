@@ -1,6 +1,7 @@
 package com.example.projemanage.firebase
 
 import android.util.Log
+import com.example.projemanage.activities.SignInActivity
 import com.example.projemanage.activities.SignUpActivity
 import com.example.projemanage.models.User
 import com.example.projemanage.utils.Constants
@@ -13,16 +14,26 @@ class FirestoreClass {
     private val mFireStore = FirebaseFirestore.getInstance()
 
     fun registerUser(activity: SignUpActivity, userInfo: User) {
-        mFireStore.collection(Constants.USERS).document(getCurrentUserId()).set(userInfo, SetOptions.merge()).addOnSuccessListener {
-            activity.userRegisteredSuccess()
-        }.addOnFailureListener {
-            e ->
-            Log.e(activity.javaClass.simpleName, "Error in registering user")
-        }
+        mFireStore.collection(Constants.USERS).document(getCurrentUserId())
+            .set(userInfo, SetOptions.merge()).addOnSuccessListener {
+                activity.userRegisteredSuccess()
+            }.addOnFailureListener { e ->
+                Log.e(activity.javaClass.simpleName, "Error writing document", e)
+            }
     }
 
     fun getCurrentUserId(): String {
         return FirebaseAuth.getInstance().currentUser!!.uid
     }
 
+    fun signInUser(activity: SignInActivity) {
+        mFireStore.collection(Constants.USERS).document(getCurrentUserId()).get()
+            .addOnSuccessListener { document ->
+                val loggedInUser = document.toObject(User::class.java)
+                if (loggedInUser != null)
+                    activity.signInSuccess(loggedInUser)
+            }.addOnFailureListener { e ->
+                Log.e(activity.javaClass.simpleName, "Error in registering user", e)
+            }
+    }
 }

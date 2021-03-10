@@ -10,7 +10,7 @@ data class User(
     val image: String = "",
     val mobile: Long = 0,
     val fcmToken: String = ""
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
