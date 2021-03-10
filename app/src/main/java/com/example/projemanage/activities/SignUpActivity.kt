@@ -6,6 +6,8 @@ import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanage.R
+import com.example.projemanage.firebase.FirestoreClass
+import com.example.projemanage.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -48,19 +50,14 @@ class SignUpActivity : BaseActivity() {
             showProgressDialog(resources.getString(R.string.please_wait))
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    hideProgressDialog()
+//                    hideProgressDialog()
                     if (task.isSuccessful) {
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         val registeredEmail = firebaseUser.email!!
-                        Toast.makeText(
-                            this,
-                            "$name you have successfully registered the email address $registeredEmail",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        FirebaseAuth.getInstance().signOut()
-                        finish()
+                        val user = User(firebaseUser.uid, name, registeredEmail)
+                        FirestoreClass() .registerUser(this, user)
                     } else {
-                        Toast.makeText(this, task.exception!!.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Registration failed", Toast.LENGTH_LONG).show()
                     }
                 }
         }
@@ -84,5 +81,16 @@ class SignUpActivity : BaseActivity() {
                 true
             }
         }
+    }
+
+    fun userRegisteredSuccess() {
+        Toast.makeText(
+            this,
+            "You have successfully registered",
+            Toast.LENGTH_LONG
+        ).show()
+        hideProgressDialog()
+        FirebaseAuth.getInstance().signOut()
+        finish()
     }
 }
