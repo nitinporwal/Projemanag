@@ -3,6 +3,7 @@ package com.example.projemanage.firebase
 import android.app.Activity
 import android.util.Log
 import com.example.projemanage.activities.MainActivity
+import com.example.projemanage.activities.ProfileActivity
 import com.example.projemanage.activities.SignInActivity
 import com.example.projemanage.activities.SignUpActivity
 import com.example.projemanage.models.User
@@ -35,7 +36,7 @@ class FirestoreClass {
         return currentUserID
     }
 
-    fun signInUser(activity: Activity) {
+    fun loadUserData(activity: Activity) {
         mFireStore.collection(Constants.USERS).document(getCurrentUserId()).get()
             .addOnSuccessListener { document ->
                 val loggedInUser = document.toObject(User::class.java)
@@ -49,6 +50,9 @@ class FirestoreClass {
                     is MainActivity -> {
                         activity.updateNavigationUserDetails(loggedInUser)
                     }
+                    is ProfileActivity -> {
+                        activity.setUserDataInUI(loggedInUser)
+                    }
                 }
             }.addOnFailureListener { e ->
                 when (activity) {
@@ -56,6 +60,9 @@ class FirestoreClass {
                         activity.hideProgressDialog()
                     }
                     is MainActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is ProfileActivity -> {
                         activity.hideProgressDialog()
                     }
                 }

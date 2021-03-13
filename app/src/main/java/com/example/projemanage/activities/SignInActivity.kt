@@ -61,7 +61,7 @@ class SignInActivity : BaseActivity() {
                             "You have successfully signed in",
                             Toast.LENGTH_LONG
                         ).show()
-                        FirestoreClass().signInUser(this@SignInActivity)
+                        FirestoreClass().loadUserData(this@SignInActivity)
                     } else {
                         Toast.makeText(this, "Authentication Failed", Toast.LENGTH_LONG).show()
                     }
