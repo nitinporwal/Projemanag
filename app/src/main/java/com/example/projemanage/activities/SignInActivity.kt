@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanage.R
+import com.example.projemanage.firebase.FirestoreClass
 import com.example.projemanage.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -60,7 +61,7 @@ class SignInActivity : BaseActivity() {
                             "You have successfully signed in",
                             Toast.LENGTH_LONG
                         ).show()
-                        startActivity(Intent(this, MainActivity::class.java))
+                        FirestoreClass().signInUser(this@SignInActivity)
                     } else {
                         Toast.makeText(this, "Authentication Failed", Toast.LENGTH_LONG).show()
                     }

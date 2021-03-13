@@ -1,6 +1,8 @@
 package com.example.projemanage.firebase
 
+import android.app.Activity
 import android.util.Log
+import com.example.projemanage.activities.MainActivity
 import com.example.projemanage.activities.SignInActivity
 import com.example.projemanage.activities.SignUpActivity
 import com.example.projemanage.models.User
@@ -27,19 +29,36 @@ class FirestoreClass {
         var currentUser = FirebaseAuth.getInstance().currentUser
 
         var currentUserID = ""
-        if(currentUser != null) {
+        if (currentUser != null) {
             currentUserID = currentUser.uid
         }
         return currentUserID
     }
 
-    fun signInUser(activity: SignInActivity) {
+    fun signInUser(activity: Activity) {
         mFireStore.collection(Constants.USERS).document(getCurrentUserId()).get()
             .addOnSuccessListener { document ->
                 val loggedInUser = document.toObject(User::class.java)
-                if (loggedInUser != null)
-                    activity.signInSuccess(loggedInUser)
+
+                when (activity) {
+                    is SignInActivity -> {
+                        if (loggedInUser != null) {
+                            activity.signInSuccess(loggedInUser)
+                        }
+                    }
+                    is MainActivity -> {
+                        activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                }
             }.addOnFailureListener { e ->
+                when (activity) {
+                    is SignInActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is MainActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e(activity.javaClass.simpleName, "Error in registering user", e)
             }
     }
