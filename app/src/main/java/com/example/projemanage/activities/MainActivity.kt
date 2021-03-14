@@ -1,8 +1,10 @@
 package com.example.projemanage.activities
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -17,6 +19,11 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    companion object {
+        const val MY_PROFILE_REQUEST_CODE: Int = 11
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -57,7 +64,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (item.itemId) {
             R.id.nav_my_profile -> {
                 val intent = Intent(this, ProfileActivity::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, MY_PROFILE_REQUEST_CODE)
             }
 
             R.id.nav_sign_out -> {
@@ -72,10 +79,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == MY_PROFILE_REQUEST_CODE) {
+            FirestoreClass().loadUserData(this)
+        } else {
+            Log.e("Cancelled", "Cancelled")
+        }
+    }
+
     fun updateNavigationUserDetails(user: User?) {
-        Glide.with(this).load(user!!.image).centerCrop().placeholder(R.drawable.ic_user_place_holder)
+        Glide.with(this).load(user!!.image).centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
             .into(nav_user_image)
-        tv_username.text=user.name
+        tv_username.text = user.name
     }
 
 
