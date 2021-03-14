@@ -32,6 +32,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         nav_view.setNavigationItemSelectedListener(this)
 
+        fab_create_board.setOnClickListener {
+            startActivity(Intent(this, CreateBoardActivity::class.java))
+        }
+
         FirestoreClass().loadUserData(this)
     }
 
