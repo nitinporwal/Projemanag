@@ -156,7 +156,7 @@ class ProfileActivity : BaseActivity() {
                     taskSnapshot.metadata!!.reference!!.downloadUrl.toString()
                 )
                 taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener { uri ->
-                    Log.i("Firebase Image URI", uri.toString())
+                    Log.i("Download Image URI", uri.toString())
                     mProfileImageURL = uri.toString()
                     updateUserProfileData()
                 }

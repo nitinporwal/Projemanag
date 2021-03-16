@@ -10,6 +10,7 @@ import com.example.projemanage.activities.ProfileActivity
 
 object Constants {
     const val USERS: String = "users"
+    const val BOARD: String = "boards"
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2
     const val IMAGE: String = "image"
@@ -24,7 +25,8 @@ object Constants {
 
 
     fun getFileExtension(activity: Activity, uri: Uri?): String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
+        return MimeTypeMap.getSingleton()
+            .getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
     }
 
 
