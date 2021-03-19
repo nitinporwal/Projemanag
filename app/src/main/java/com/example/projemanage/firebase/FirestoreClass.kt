@@ -113,4 +113,16 @@ class FirestoreClass {
                 Log.e(activity.javaClass.simpleName, "Error in registering user", e)
             }
     }
+
+    fun getBoardsDetails(activity: TaskListActivity, boardDocumentId: String) {
+        mFireStore.collection(Constants.BOARD).document(boardDocumentId).get()
+            .addOnSuccessListener { document ->
+                Log.i(activity.javaClass.simpleName, document.toString())
+                val boardsList: ArrayList<Board> = ArrayList()
+                activity.boardDetails(document.toObject(Board::class.java)!!)
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating a board", e)
+            }
+    }
 }

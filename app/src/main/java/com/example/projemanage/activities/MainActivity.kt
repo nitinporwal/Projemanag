@@ -2,18 +2,14 @@ package com.example.projemanage.activities
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.projemanage.R
-import com.example.projemanage.TaskListActivity
 import com.example.projemanage.adapters.BoardItemsAdapter
 import com.example.projemanage.firebase.FirestoreClass
 import com.example.projemanage.models.Board
@@ -67,7 +63,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             adapter.setOnClickListener(object : BoardItemsAdapter.OnClickListener{
                 override fun onClick(position: Int, model: Board) {
-                    startActivity(Intent(this@MainActivity, TaskListActivity::class.java))
+                    var intent = Intent(this@MainActivity, TaskListActivity::class.java)
+                    intent.putExtra(Constants.DOCUMENT_ID, model.documentId)
+                    startActivity(intent)
                 }
             })
         }
