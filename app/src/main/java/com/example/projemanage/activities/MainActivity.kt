@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.projemanage.R
+import com.example.projemanage.TaskListActivity
 import com.example.projemanage.adapters.BoardItemsAdapter
 import com.example.projemanage.firebase.FirestoreClass
 import com.example.projemanage.models.Board
@@ -63,6 +64,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             val adapter = BoardItemsAdapter(this, boardsList)
             rv_boards_list.adapter = adapter
+
+            adapter.setOnClickListener(object : BoardItemsAdapter.OnClickListener{
+                override fun onClick(position: Int, model: Board) {
+                    startActivity(Intent(this@MainActivity, TaskListActivity::class.java))
+                }
+            })
         }
         else {
             rv_boards_list.visibility = View.GONE
