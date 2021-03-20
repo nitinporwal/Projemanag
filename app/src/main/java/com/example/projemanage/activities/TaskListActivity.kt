@@ -1,9 +1,12 @@
 package com.example.projemanage.activities
 
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projemanage.R
+import com.example.projemanage.adapters.TaskListItemsAdapter
 import com.example.projemanage.firebase.FirestoreClass
 import com.example.projemanage.models.Board
+import com.example.projemanage.models.Task
 import com.example.projemanage.utils.Constants
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_task_list.*
@@ -40,5 +43,15 @@ class TaskListActivity : BaseActivity() {
     fun boardDetails(board: Board) {
         hideProgressDialog()
         setupActionBar(board.name)
+
+        val addTaskList = Task(resources.getString(R.string.add_list))
+        board.taskList.add(addTaskList)
+
+        rv_task_list.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rv_task_list.setHasFixedSize(true)
+
+        val adapter = TaskListItemsAdapter(this, board.taskList)
+        rv_task_list.adapter = adapter
     }
 }
