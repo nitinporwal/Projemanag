@@ -80,6 +80,20 @@ class FirestoreClass {
             }
     }
 
+    fun addUpdateTaskList(activity: TaskListActivity, board: Board) {
+        val taskListHashMap = HashMap<String, Any>()
+        taskListHashMap[Constants.TASK_LIST] = board.taskList
+
+        mFireStore.collection(Constants.BOARD).document(board.documentId).update(taskListHashMap)
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName, "Task updated successfully")
+                activity.addUpdateTaskListSuccess()
+            }.addOnFailureListener { exception ->
+            activity.hideProgressDialog()
+            Log.e(activity.javaClass.simpleName, "Error while creating a board", exception)
+        }
+    }
+
     fun loadUserData(activity: Activity, readBoadsList: Boolean = false) {
         mFireStore.collection(Constants.USERS).document(getCurrentUserId()).get()
             .addOnSuccessListener { document ->
@@ -118,8 +132,9 @@ class FirestoreClass {
         mFireStore.collection(Constants.BOARD).document(boardDocumentId).get()
             .addOnSuccessListener { document ->
                 Log.i(activity.javaClass.simpleName, document.toString())
-                val boardsList: ArrayList<Board> = ArrayList()
-                activity.boardDetails(document.toObject(Board::class.java)!!)
+                val board = document.toObject(Board::class.java)!!
+                board.documentId = document.id
+                activity.boardDetails(board)
             }.addOnFailureListener { e ->
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error while creating a board", e)
