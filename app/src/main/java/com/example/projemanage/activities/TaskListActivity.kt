@@ -6,6 +6,7 @@ import com.example.projemanage.R
 import com.example.projemanage.adapters.TaskListItemsAdapter
 import com.example.projemanage.firebase.FirestoreClass
 import com.example.projemanage.models.Board
+import com.example.projemanage.models.Card
 import com.example.projemanage.models.Task
 import com.example.projemanage.utils.Constants
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -91,5 +92,25 @@ class TaskListActivity : BaseActivity() {
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this, mBoardDetails)
+    }
+
+    fun addCardToTaskList(position: Int, cardName: String) {
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
+
+        val createdBy: String = FirestoreClass().getCurrentUserId()
+
+        val cardAssignedUsersList: ArrayList<String> = ArrayList()
+        cardAssignedUsersList.add(createdBy)
+
+        val card = Card(cardName, createdBy, cardAssignedUsersList)
+
+        val cardList = mBoardDetails.taskList[position].cards
+        cardList.add(card)
+
+        val task = Task(mBoardDetails.taskList[position].title, mBoardDetails.taskList[position].createdBy, cardList)
+        mBoardDetails.taskList[position]=task
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this, mBoardDetails)
+
     }
 }

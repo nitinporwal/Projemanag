@@ -84,6 +84,25 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
             holder.itemView.ib_delete_list_name.setOnClickListener {
                 alertDialogForDeletelist(position, model.title)
             }
+
+            holder.itemView.tv_add_card.setOnClickListener {
+                holder.itemView.cv_add_card.visibility = View.VISIBLE
+                holder.itemView.tv_add_card.visibility = View.GONE
+            }
+            holder.itemView.ib_close_card_name.setOnClickListener {
+                holder.itemView.cv_add_card.visibility = View.GONE
+                holder.itemView.tv_add_card.visibility = View.VISIBLE
+            }
+            holder.itemView.ib_done_card_name.setOnClickListener {
+                val cardName = holder.itemView.et_card_name.text.toString()
+                if (cardName.isNotEmpty()) {
+                    if (context is TaskListActivity) {
+                        context.addCardToTaskList(position, cardName)
+                    }
+                } else {
+                    Toast.makeText(context, "Please Enter a Card Name.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
