@@ -1,5 +1,6 @@
 package com.example.projemanage.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
@@ -49,14 +50,39 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
 
             holder.itemView.ib_done_list_name.setOnClickListener {
                 val listName = holder.itemView.et_task_list_name.text.toString()
-                if(listName.isNotEmpty()) {
-                    if(context is TaskListActivity) {
+                if (listName.isNotEmpty()) {
+                    if (context is TaskListActivity) {
                         context.createTaskList(listName)
                     }
+                } else {
+                    Toast.makeText(context, "Please Enter a List Name.", Toast.LENGTH_SHORT).show()
                 }
-                else {
-                    Toast.makeText(context, "Please Enter List Name.", Toast.LENGTH_SHORT).show()
+            }
+
+            holder.itemView.ib_edit_list_name.setOnClickListener {
+                holder.itemView.et_edit_task_list_name.setText(model.title)
+                holder.itemView.ll_title_view.visibility = View.GONE
+                holder.itemView.cv_edit_task_list_name.visibility = View.VISIBLE
+            }
+
+            holder.itemView.ib_close_editable_view.setOnClickListener {
+                holder.itemView.cv_edit_task_list_name.visibility = View.GONE
+                holder.itemView.ll_title_view.visibility = View.VISIBLE
+            }
+
+            holder.itemView.ib_done_edit_list_name.setOnClickListener {
+                val listName = holder.itemView.et_edit_task_list_name.text.toString()
+                if (listName.isNotEmpty()) {
+                    if (context is TaskListActivity) {
+                        context.updateTaskList(position, listName, model)
+                    }
+                } else {
+                    Toast.makeText(context, "Please Enter a List Name.", Toast.LENGTH_SHORT).show()
                 }
+            }
+
+            holder.itemView.ib_delete_list_name.setOnClickListener {
+                alertDialogForDeletelist(position, model.title)
             }
         }
     }
@@ -66,6 +92,29 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
     }
 
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+    }
+
+    private fun alertDialogForDeletelist(position: Int, title: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Alert")
+        builder.setMessage("Are you sure want to delete $title")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setPositiveButton("Yes") { dialogInterface, which ->
+            dialogInterface.dismiss()
+            if (context is TaskListActivity) {
+                context.deleteTaskList(position)
+            }
+        }
+
+        builder.setNegativeButton("No") { dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+
+        val alertDialog: AlertDialog = builder.create()
+
+        alertDialog.setCancelable(false)
+        alertDialog.show()
 
     }
 
