@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projemanage.R
 import com.example.projemanage.activities.TaskListActivity
@@ -103,6 +104,13 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
                     Toast.makeText(context, "Please Enter a Card Name.", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            holder.itemView.rv_card_list.layoutManager = LinearLayoutManager(context)
+
+            holder.itemView.rv_card_list.setHasFixedSize(true)
+
+            val adapter = CardListItemsAdapter(context, model.cards)
+            holder.itemView.rv_card_list.adapter = adapter
         }
     }
 
