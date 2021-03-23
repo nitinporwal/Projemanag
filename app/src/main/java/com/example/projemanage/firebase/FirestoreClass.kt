@@ -89,9 +89,9 @@ class FirestoreClass {
                 Log.e(activity.javaClass.simpleName, "Task updated successfully")
                 activity.addUpdateTaskListSuccess()
             }.addOnFailureListener { exception ->
-            activity.hideProgressDialog()
-            Log.e(activity.javaClass.simpleName, "Error while creating a board", exception)
-        }
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating a board", exception)
+            }
     }
 
     fun loadUserData(activity: Activity, readBoadsList: Boolean = false) {
@@ -138,6 +138,25 @@ class FirestoreClass {
             }.addOnFailureListener { e ->
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error while creating a board", e)
+            }
+    }
+
+    fun getAssignedMembersListDetails(activity: MembersActivity, assignedTo: ArrayList<String>) {
+        mFireStore.collection(Constants.USERS).whereIn(Constants.ID, assignedTo).get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val usersList: ArrayList<User> = ArrayList()
+
+                for (i in document.documents) {
+                    val user = i.toObject(User::class.java)!!
+                    usersList.add(user)
+                }
+                activity.setUpMembersList(usersList)
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating a board", e)
+
+
             }
     }
 }
