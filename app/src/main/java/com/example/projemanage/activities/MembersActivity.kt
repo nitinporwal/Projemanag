@@ -20,6 +20,8 @@ class MembersActivity : BaseActivity() {
 
     private lateinit var mBoardDetails: Board
 
+    private lateinit var mAssignedMembersList: ArrayList<User>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_members)
@@ -35,11 +37,16 @@ class MembersActivity : BaseActivity() {
 
     fun setUpMembersList(list: ArrayList<User>) {
         hideProgressDialog()
-
+        mAssignedMembersList = list
         rv_member_list.layoutManager = LinearLayoutManager(this)
         rv_member_list.setHasFixedSize(true)
         val adapter = MemberListItemsAdapter(this, list)
         rv_member_list.adapter = adapter
+    }
+
+    fun memberDetails(user: User) {
+        mBoardDetails.assignedTo.add(user.id)
+        FirestoreClass().assignMemberToBoard(this, mBoardDetails, user)
     }
 
     private fun setupActionBar() {
@@ -80,6 +87,8 @@ class MembersActivity : BaseActivity() {
             val email = dialog.et_email_search_member.text.toString()
             if (email.isNotEmpty()) {
                 dialog.dismiss()
+                showProgressDialog(resources.getString(R.string.please_wait))
+                FirestoreClass().getMemberDetails(this, email)
             } else {
                 Toast.makeText(this, "Please enter members email address.", Toast.LENGTH_SHORT)
                     .show()
@@ -89,5 +98,11 @@ class MembersActivity : BaseActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    fun memberAssignSuccess(user: User) {
+        hideProgressDialog()
+        mAssignedMembersList.add(user)
+        setUpMembersList(mAssignedMembersList)
     }
 }
