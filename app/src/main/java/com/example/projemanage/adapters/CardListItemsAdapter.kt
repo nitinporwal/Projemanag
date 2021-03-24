@@ -22,6 +22,12 @@ class CardListItemsAdapter(private val context: Context, private val list: Array
 
         if(holder is MyViewHolder) {
             holder.itemView.tv_card_name.text = model.name
+
+            holder.itemView.setOnClickListener {
+                if(onClickListener!=null) {
+                    onClickListener!!.onClick(position)
+                }
+            }
         }
 
     }
@@ -39,7 +45,7 @@ class CardListItemsAdapter(private val context: Context, private val list: Array
     }
 
     interface OnClickListener {
-        fun onClick(position: Int, card: Card)
+        fun onClick(position: Int)
     }
 
 }

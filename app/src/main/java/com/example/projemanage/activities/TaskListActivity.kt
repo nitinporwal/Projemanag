@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.projemanage.CardDetailsActivity
 import com.example.projemanage.R
 import com.example.projemanage.adapters.TaskListItemsAdapter
 import com.example.projemanage.firebase.FirestoreClass
@@ -43,6 +44,10 @@ class TaskListActivity : BaseActivity() {
         }
 
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun cardDetails(taskListPosition: Int, cardPosition: Int) {
+        startActivity(Intent(this, CardDetailsActivity::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
