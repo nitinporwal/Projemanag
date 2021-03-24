@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.projemanage.CardDetailsActivity
 import com.example.projemanage.R
 import com.example.projemanage.adapters.TaskListItemsAdapter
 import com.example.projemanage.firebase.FirestoreClass
@@ -15,7 +14,6 @@ import com.example.projemanage.models.Board
 import com.example.projemanage.models.Card
 import com.example.projemanage.models.Task
 import com.example.projemanage.utils.Constants
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_task_list.*
 
 class TaskListActivity : BaseActivity() {
@@ -47,7 +45,11 @@ class TaskListActivity : BaseActivity() {
     }
 
     fun cardDetails(taskListPosition: Int, cardPosition: Int) {
-        startActivity(Intent(this, CardDetailsActivity::class.java))
+        val intent = Intent(this, CardDetailsActivity::class.java)
+        intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
+        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
