@@ -13,6 +13,7 @@ import com.example.projemanage.firebase.FirestoreClass
 import com.example.projemanage.models.Board
 import com.example.projemanage.models.Card
 import com.example.projemanage.models.Task
+import com.example.projemanage.models.User
 import com.example.projemanage.utils.Constants
 import kotlinx.android.synthetic.main.activity_card_details.*
 
@@ -22,6 +23,7 @@ class CardDetailsActivity : BaseActivity() {
     private var mTaskListPosition = -1
     private var mCardPosition = -1
     private var mSelectedColor = ""
+    private lateinit var mMembersDetailsList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +117,9 @@ class CardDetailsActivity : BaseActivity() {
         }
         if (intent.hasExtra(Constants.CARD_LIST_ITEM_POSITION)) {
             mCardPosition = intent.getIntExtra(Constants.CARD_LIST_ITEM_POSITION, -1)
+        }
+        if(intent.hasExtra(Constants.BOARD_MEMBERS_LIST)) {
+            mMembersDetailsList = intent.getParcelableArrayListExtra(Constants.BOARD_MEMBERS_LIST)!!
         }
     }
 
