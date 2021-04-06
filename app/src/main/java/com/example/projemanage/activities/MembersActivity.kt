@@ -14,6 +14,7 @@ import com.example.projemanage.adapters.MemberListItemsAdapter
 import com.example.projemanage.firebase.FirestoreClass
 import com.example.projemanage.models.Board
 import com.example.projemanage.models.User
+import com.example.projemanage.utils.ApiKey
 import com.example.projemanage.utils.Constants
 import kotlinx.android.synthetic.main.activity_members.*
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -151,7 +152,7 @@ class MembersActivity : BaseActivity() {
                 connection.setRequestProperty("Accept", "application/json")
                 connection.setRequestProperty(
                     Constants.FCM_AUTHORIZATION,
-                    "${Constants.FCM_KEY}=${Constants.FCM_SERVER_KEY}"
+                    "${Constants.FCM_KEY}=${ApiKey.FCM_SERVER_KEY}"
                 )
                 connection.useCaches = false
 
